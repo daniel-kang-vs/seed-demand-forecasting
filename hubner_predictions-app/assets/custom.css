@@ -1,0 +1,54 @@
+/* custom.css */
+
+/* Page background */
+body {
+    background-color: rgb(83, 127, 68); /* custom green */
+    margin: 0;
+    font-family: "Open Sans", verdana, arial, sans-serif;
+    color: #f0f0f0; /* default light gray text for contrast */
+}
+
+/* Page content text (inside green background, not navbar) */
+.page-content, .dash-table, .container, .row, .col {
+    color: #f0f0f0; /* light gray text */
+    font-size: 16px;
+}
+
+/* Navbar background */
+.navbar {
+    background-color: white !important;
+    padding: 0.5rem 1rem;
+}
+
+/* Navbar container padding */
+.navbar .container {
+    margin-left: 10px;
+}
+
+/* Navbar brand + links */
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: #333333 !important; /* dark gray */
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none; /* no underline by default */
+}
+
+/* Navbar hover states */
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: #2e7d32 !important; /* green on hover */
+}
+
+/* Active link style */
+.navbar .nav-link.active {
+    color: #14b01c !important; /* green text */
+    font-weight: 800;
+    border-bottom: 3px solid #2e7d32; /* green underline */
+    padding-bottom: 2px; /* keeps underline neat */
+}
+
+/* Right-aligned items fix */
+.ms-auto {
+    margin-left: 0px !important;
+}

@@ -1,0 +1,9 @@
+To run the program
+Run the app.py program by clicking the Run python file on the right side. You might need to download some things like dash or bootstrap first.
+
+To make edits:
+
+1) make sure you are in the Data-Visualization branch. You can move to this branch by using the command git checkout Data-Visualization.  
+If you want to check which branch you are in you can use git status in the terminal.
+
+2) Commit and Push changes by either using the Source Control tab on the left or on github desktop.
