@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seed Demand Forecasting &mdash; Analytics Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>
+</head>
+<body>
+
+<!-- ───────────── Navbar ───────────── -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#hero" class="nav-brand">
+      <img src="assets/hubner_logo.png" alt="Hubner Seed" class="nav-logo" />
+      <span>Seed Demand Forecasting</span>
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#predictions">Predictions</a></li>
+      <li><a href="#tech">Tech Stack</a></li>
+      <li><a href="https://github.com/TheDataMine/f2025_s2026_wl_hubner_predictiveanalytics" target="_blank" rel="noopener">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ───────────── Hero ───────────── -->
+<header id="hero">
+  <div class="hero-content">
+    <p class="hero-tag">Purdue Data Mine &mdash; Hubner Seed</p>
+    <h1>Seed Demand Forecasting<br/>Analytics Dashboard</h1>
+    <p class="hero-sub">
+      An end-to-end predictive analytics platform that transforms raw production-line data
+      into actionable demand forecasts, helping seed producers plan inventory with confidence.
+    </p>
+    <div class="hero-buttons">
+      <a href="#dashboard" class="btn btn-primary">Explore Dashboard</a>
+      <a href="#about" class="btn btn-outline">Learn More</a>
+    </div>
+  </div>
+  <div class="hero-fade"></div>
+</header>
+
+<!-- ───────────── About ───────────── -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">About the Project</h2>
+    <p class="section-subtitle">Built for Hubner Seed in partnership with the Purdue Data Mine</p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-8"/></svg>
+        </div>
+        <h3>Descriptive Analytics</h3>
+        <p>Interactive treemaps, donut charts, and consistency analyses reveal
+           how seed product lines (PLFs) perform across years and companies.</p>
+      </div>
+      <div class="about-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Predictive Modeling</h3>
+        <p>Multiple regression and ML models are compared on R&sup2; and RMSE to find
+           the best predictor for future seed demand by PLF cluster.</p>
+      </div>
+      <div class="about-card">
+        <div class="card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h3>Data Pipeline</h3>
+        <p>A robust ETL pipeline ingests messy, wide-format CSVs from
+           multiple production years and normalizes them into analysis-ready frames.</p>
+      </div>
+    </div>
+
+    <div class="about-note">
+      <strong>Note:</strong> All data shown on this website is <em>synthetic</em>.
+      It mirrors the schema and statistical properties of the real dataset
+      but contains no proprietary Hubner Seed information.
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Interactive Dashboard ───────────── -->
+<section id="dashboard">
+  <div class="container">
+    <h2 class="section-title">Interactive Dashboard</h2>
+    <p class="section-subtitle">Filter by year and explore seed demand patterns (synthetic data)</p>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label for="yearFilter">Year</label>
+        <select id="yearFilter"><option value="ALL">All Years</option></select>
+      </div>
+      <div class="filter-group">
+        <label for="traitFilter">Trait</label>
+        <select id="traitFilter"><option value="ALL">All Traits</option></select>
+      </div>
+    </div>
+
+    <!-- Row 1: Treemap + Donut -->
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>PLF Distribution by Year</h3>
+        <div id="treemapChart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <div class="chart-row two-col">
+      <div class="chart-card">
+        <h3>Quantity Share by Company</h3>
+        <div id="donutChart" class="chart-container"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Quantity Distribution</h3>
+        <div id="histChart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Row 2: Consistency -->
+    <div class="chart-row two-col">
+      <div class="chart-card">
+        <h3>Stability by PLF (lower CV = steadier)</h3>
+        <div id="stabilityChart" class="chart-container"></div>
+      </div>
+      <div class="chart-card">
+        <h3>Trend by PLF (slope of yearly totals)</h3>
+        <div id="trendChart" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Row 3: Yield + KPI -->
+    <div class="chart-row two-col">
+      <div class="chart-card">
+        <h3>Yield by Relative Maturity</h3>
+        <div id="yieldChart" class="chart-container"></div>
+      </div>
+      <div class="chart-card">
+        <h3>PLFs Meeting Stability Rule</h3>
+        <div id="kpiGauge" class="chart-container"></div>
+      </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="chart-row">
+      <div class="chart-card wide">
+        <h3>PLF &times; Year Summary Table</h3>
+        <div class="table-wrap">
+          <table id="summaryTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Predictions ───────────── -->
+<section id="predictions">
+  <div class="container">
+    <h2 class="section-title">Predictive Analytics</h2>
+    <p class="section-subtitle">Machine learning model comparisons and cluster analysis</p>
+
+    <div class="pred-grid">
+      <div class="pred-card">
+        <h3>Model Comparison &mdash; Test R&sup2; (2024)</h3>
+        <img src="assets/model_comparison_r_squared.png" alt="R-squared comparison" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Model Comparison &mdash; RMSE / Mean (2024)</h3>
+        <img src="assets/model_comparison_rmse.png" alt="RMSE comparison" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Elbow Method for Optimal k (PLF Binning)</h3>
+        <img src="assets/elbow_method.png" alt="Elbow method" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Actual vs Predicted Quantity by PLF Bin (2024)</h3>
+        <img src="assets/mean_actual_vs_predicted_quantity.png" alt="Actual vs predicted" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Tech Stack ───────────── -->
+<section id="tech">
+  <div class="container">
+    <h2 class="section-title">Technology Stack</h2>
+    <p class="section-subtitle">Tools and frameworks powering this project</p>
+    <div class="tech-grid">
+      <div class="tech-pill"><span class="tech-dot" style="background:#306998"></span>Python</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#119DFF"></span>Dash</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#3F4F75"></span>Plotly</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#150458"></span>Pandas</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#013243"></span>NumPy</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#7952B3"></span>Bootstrap</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#F05032"></span>Git</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#181717"></span>GitHub Pages</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#F7DF1E"></span>JavaScript</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#E34F26"></span>HTML / CSS</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Footer ───────────── -->
+<footer>
+  <div class="container footer-inner">
+    <p>&copy; 2025 Purdue Data Mine &mdash; Hubner Seed Team</p>
+    <p class="footer-note">All data on this site is synthetic and for demonstration purposes only.</p>
+  </div>
+</footer>
+
+<script src="js/dashboard.js"></script>
+<script>
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => {
+    navLinks.classList.toggle('open');
+    hamburger.classList.toggle('active');
+  });
+  navLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      hamburger.classList.remove('active');
+    })
+  );
+
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+</script>
+</body>
+</html>
