@@ -87,54 +87,51 @@ function renderAll() {
   renderTable(RAW_CLEANED);
 }
 
-/* ──────────── Treemap ──────────── */
+/* ──────────── PLF Distribution (Top PLFs stacked bar by year) ──────────── */
 
 function renderTreemap(data) {
-  const counts = {};
+  if (data.length === 0) {
+    Plotly.react('treemapChart', [], {
+      ...PLOTLY_LAYOUT_BASE,
+      annotations: [{ text: 'No data for selected filters', showarrow: false,
+        font: { size: 16, color: '#b0c4a8' }, xref: 'paper', yref: 'paper', x: .5, y: .5 }],
+    }, PLOTLY_CONFIG);
+    return;
+  }
+
+  const byPlfYear = {};
   data.forEach(r => {
-    const key = r.year + '|' + r.PLF;
-    counts[key] = (counts[key] || 0) + 1;
+    const plf = String(r.PLF);
+    if (!byPlfYear[plf]) byPlfYear[plf] = {};
+    byPlfYear[plf][r.year] = (byPlfYear[plf][r.year] || 0) + 1;
   });
 
-  const labels = [], parents = [], values = [], ids = [];
-  const yearTotals = {};
+  const plfTotals = Object.entries(byPlfYear).map(([plf, ym]) => ({
+    plf,
+    total: Object.values(ym).reduce((a, b) => a + b, 0),
+  }));
+  plfTotals.sort((a, b) => b.total - a.total);
+  const topPlfs = plfTotals.slice(0, 20).map(p => p.plf);
 
-  Object.entries(counts).forEach(([k, v]) => {
-    const [yr, plf] = k.split('|');
-    yearTotals[yr] = (yearTotals[yr] || 0) + v;
-  });
+  const years = [...new Set(data.map(r => r.year))].sort();
+  const colors = ['#4ade80','#38bdf8','#facc15','#f472b6','#a78bfa',
+                  '#fb923c','#34d399','#60a5fa','#f87171','#c084fc'];
 
-  Object.keys(yearTotals).sort().forEach(yr => {
-    ids.push(yr);
-    labels.push(yr);
-    parents.push('');
-    values.push(0);
-  });
+  const traces = years.map((yr, i) => ({
+    x: topPlfs,
+    y: topPlfs.map(plf => (byPlfYear[plf] && byPlfYear[plf][yr]) || 0),
+    name: String(yr),
+    type: 'bar',
+    marker: { color: colors[i % colors.length] },
+  }));
 
-  Object.entries(counts).forEach(([k, v]) => {
-    const [yr, plf] = k.split('|');
-    const id = k;
-    ids.push(id);
-    labels.push(String(plf));
-    parents.push(yr);
-    values.push(v);
-  });
-
-  const trace = {
-    type: 'treemap',
-    ids, labels, parents, values,
-    branchvalues: 'total',
-    textinfo: 'label+value',
-    marker: {
-      colorscale: [[0, '#1a3a1a'], [0.5, '#4ade80'], [1, '#86efac']],
-      colors: values,
-    },
-    hovertemplate: '%{label}: %{value}<extra></extra>',
-  };
-
-  Plotly.react('treemapChart', [trace], {
+  Plotly.react('treemapChart', traces, {
     ...PLOTLY_LAYOUT_BASE,
-    margin: { l: 10, r: 10, t: 10, b: 10 },
+    barmode: 'stack',
+    xaxis: { title: 'PLF', tickangle: -40, gridcolor: 'rgba(255,255,255,0.05)', type: 'category' },
+    yaxis: { title: 'Count', gridcolor: 'rgba(255,255,255,0.05)' },
+    legend: { font: { color: '#b0c4a8' }, bgcolor: 'rgba(0,0,0,0)' },
+    margin: { l: 50, r: 20, t: 20, b: 80 },
   }, PLOTLY_CONFIG);
 }
 
