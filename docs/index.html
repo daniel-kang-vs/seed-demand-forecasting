@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Seed Demand Forecasting &mdash; Analytics Dashboard</title>
+  <title>Seed Demand Forecasting — Inventory &amp; Reorder Planning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.plot.ly/plotly-2.35.0.min.js"></script>
 </head>
 <body>
@@ -21,10 +23,11 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
+      <li><a href="#context">Context</a></li>
+      <li><a href="#pipeline">Pipeline</a></li>
+      <li><a href="#predictions">Methodology</a></li>
       <li><a href="#dashboard">Dashboard</a></li>
-      <li><a href="#predictions">Predictions</a></li>
-      <li><a href="#tech">Tech Stack</a></li>
+      <li><a href="#impact">Impact</a></li>
       <li><a href="https://github.com/TheDataMine/f2025_s2026_wl_hubner_predictiveanalytics" target="_blank" rel="noopener">GitHub</a></li>
     </ul>
   </div>
@@ -33,50 +36,77 @@
 <!-- ───────────── Hero ───────────── -->
 <header id="hero">
   <div class="hero-content">
-    <p class="hero-tag">Purdue Data Mine &mdash; Hubner Seed</p>
-    <h1>Seed Demand Forecasting<br/>Analytics Dashboard</h1>
+    <p class="hero-brand">Hubner Seed · Supply Chain Analytics</p>
+    <h1>Prioritize the right SKUs before capacity runs out</h1>
     <p class="hero-sub">
-      An end-to-end predictive analytics platform that transforms raw production-line data
-      into actionable demand forecasts, helping seed producers plan inventory with confidence.
+      Demand forecasting that turns production-line history into reorder-risk signals—
+      so planners know which seed product lines to stock, hold, or deprioritize under real capacity constraints.
     </p>
     <div class="hero-buttons">
       <a href="#dashboard" class="btn btn-primary">Explore Dashboard</a>
-      <a href="#about" class="btn btn-outline">Learn More</a>
+      <a href="#impact" class="btn btn-outline">See Business Impact</a>
     </div>
   </div>
   <div class="hero-fade"></div>
 </header>
 
-<!-- ───────────── About ───────────── -->
-<section id="about">
+<!-- ───────────── Business Context & Stakes ───────────── -->
+<section id="context">
   <div class="container">
-    <h2 class="section-title">About the Project</h2>
-    <p class="section-subtitle">Built for Hubner Seed in partnership with the Purdue Data Mine</p>
+    <p class="section-eyebrow">Business Context &amp; Stakes</p>
+    <h2 class="section-title">Inventory decisions with real operational cost</h2>
+    <p class="section-subtitle">
+      Seed producers face a classic supply-chain tradeoff: overstock ties up working capital and warehouse space;
+      understock means missed planting windows and lost dealer orders. Capacity is finite—every SKU prioritized is another delayed.
+    </p>
 
-    <div class="about-grid">
-      <div class="about-card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-8 4 4 4-8"/></svg>
-        </div>
-        <h3>Descriptive Analytics</h3>
-        <p>Interactive treemaps, donut charts, and consistency analyses reveal
-           how seed product lines (PLFs) perform across years and companies.</p>
+    <div class="stakes-grid">
+      <div class="stake-item">
+        <h3>SKU prioritization</h3>
+        <p>Which product lines (PLFs) deserve scarce production and warehouse slots when demand is uneven across years and traits?</p>
       </div>
-      <div class="about-card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        </div>
-        <h3>Predictive Modeling</h3>
-        <p>Multiple regression and ML models are compared on R&sup2; and RMSE to find
-           the best predictor for future seed demand by PLF cluster.</p>
+      <div class="stake-item">
+        <h3>Reorder risk</h3>
+        <p>Volatile or declining SKUs create stockout exposure. Stable, high-volume lines need reliable reorder cadence—not reactive firefighting.</p>
       </div>
-      <div class="about-card">
-        <div class="card-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        </div>
-        <h3>Data Pipeline</h3>
-        <p>A robust ETL pipeline ingests messy, wide-format CSVs from
-           multiple production years and normalizes them into analysis-ready frames.</p>
+      <div class="stake-item">
+        <h3>Capacity constraints</h3>
+        <p>Planners need evidence—not gut feel—to allocate limited acreage, processing, and inventory dollars across hundreds of seed variants.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Data Pipeline ───────────── -->
+<section id="pipeline">
+  <div class="container">
+    <p class="section-eyebrow">Data Pipeline</p>
+    <h2 class="section-title">From production-line CSVs to analysis-ready frames</h2>
+    <p class="section-subtitle">
+      An ETL workflow ingests multi-year, wide-format production exports, normalizes schema drift across seasons,
+      and joins quantity, trait, company, and yield attributes for forecasting and BI.
+    </p>
+
+    <div class="pipeline-steps">
+      <div class="pipeline-step">
+        <span class="step-num">01</span>
+        <h3>Ingest</h3>
+        <p>Load messy, year-sliced production-line CSVs with inconsistent column layouts and naming.</p>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">02</span>
+        <h3>Transform</h3>
+        <p>Normalize to long-form records—PLF, year, trait, company, quantity—ready for aggregation and modeling.</p>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">03</span>
+        <h3>Enrich</h3>
+        <p>Merge yield and maturity fields; compute stability (CV), trend slopes, and reorder-risk features by SKU cluster.</p>
+      </div>
+      <div class="pipeline-step">
+        <span class="step-num">04</span>
+        <h3>Serve</h3>
+        <p>Publish filtered views and model outputs into an interactive dashboard for weekly planning reviews.</p>
       </div>
     </div>
 
@@ -88,11 +118,58 @@
   </div>
 </section>
 
-<!-- ───────────── Interactive Dashboard ───────────── -->
+<!-- ───────────── Methodology ───────────── -->
+<section id="predictions">
+  <div class="container">
+    <p class="section-eyebrow">Methodology</p>
+    <h2 class="section-title">Predictive reorder-risk &amp; demand forecasting</h2>
+    <p class="section-subtitle">
+      Models estimate future quantity by PLF cluster, then surface stability and trend signals
+      that planners use to flag reorder risk under capacity limits.
+    </p>
+
+    <div class="method-points">
+      <div class="method-point">
+        <h3>Demand forecasting</h3>
+        <p>Regression and ML candidates are scored on holdout R&sup2; and RMSE to select the best predictor of next-season quantity by PLF bin.</p>
+      </div>
+      <div class="method-point">
+        <h3>Reorder-risk signals</h3>
+        <p>Coefficient of variation and multi-year slope highlight volatile or declining SKUs that need tighter inventory buffers—or deliberate deprioritization.</p>
+      </div>
+      <div class="method-point">
+        <h3>SKU clustering</h3>
+        <p>Elbow-guided PLF binning groups similar demand profiles so forecasts and planning rules scale beyond one-off SKU analysis.</p>
+      </div>
+    </div>
+
+    <div class="pred-grid">
+      <div class="pred-card">
+        <h3>Model Comparison — Test R&sup2; (2024)</h3>
+        <img src="assets/model_comparison_r_squared.png" alt="R-squared comparison" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Model Comparison — RMSE / Mean (2024)</h3>
+        <img src="assets/model_comparison_rmse.png" alt="RMSE comparison" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Elbow Method for Optimal k (PLF Binning)</h3>
+        <img src="assets/elbow_method.png" alt="Elbow method" loading="lazy" />
+      </div>
+      <div class="pred-card">
+        <h3>Actual vs Predicted Quantity by PLF Bin (2024)</h3>
+        <img src="assets/mean_actual_vs_predicted_quantity.png" alt="Actual vs predicted" loading="lazy" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── Interactive Dashboard (Visualizations) ───────────── -->
 <section id="dashboard">
   <div class="container">
+    <p class="section-eyebrow">Visualizations</p>
     <h2 class="section-title">Interactive Dashboard</h2>
-    <p class="section-subtitle">Filter by year and explore seed demand patterns (synthetic data)</p>
+    <p class="section-subtitle">Filter by year and trait to explore demand patterns, SKU stability, and yield signals (synthetic data)</p>
 
     <!-- Filters -->
     <div class="filter-bar">
@@ -106,7 +183,7 @@
       </div>
     </div>
 
-    <!-- Row 1: Treemap + Donut -->
+    <!-- Row 1: Treemap -->
     <div class="chart-row">
       <div class="chart-card wide">
         <h3>PLF Distribution by Year</h3>
@@ -164,28 +241,45 @@
   </div>
 </section>
 
-<!-- ───────────── Predictions ───────────── -->
-<section id="predictions">
+<!-- ───────────── Business Insights & Impact (PROMINENT) ───────────── -->
+<section id="impact">
   <div class="container">
-    <h2 class="section-title">Predictive Analytics</h2>
-    <p class="section-subtitle">Machine learning model comparisons and cluster analysis</p>
+    <p class="section-eyebrow">Business Insights &amp; Impact</p>
+    <h2 class="section-title">Adopted for weekly planning across the business</h2>
+    <p class="section-subtitle impact-lead">
+      The forecasting workflow and dashboard were adopted by <strong>three cross-functional teams</strong>
+      for weekly inventory and reorder planning—aligning supply, sales, and operations around shared demand signals.
+    </p>
 
-    <div class="pred-grid">
-      <div class="pred-card">
-        <h3>Model Comparison &mdash; Test R&sup2; (2024)</h3>
-        <img src="assets/model_comparison_r_squared.png" alt="R-squared comparison" loading="lazy" />
+    <div class="impact-banner">
+      <div class="impact-stat">
+        <span class="impact-num">3</span>
+        <span class="impact-label">Cross-functional teams</span>
       </div>
-      <div class="pred-card">
-        <h3>Model Comparison &mdash; RMSE / Mean (2024)</h3>
-        <img src="assets/model_comparison_rmse.png" alt="RMSE comparison" loading="lazy" />
+      <div class="impact-stat-divider" aria-hidden="true"></div>
+      <div class="impact-stat">
+        <span class="impact-num">Weekly</span>
+        <span class="impact-label">Planning cadence</span>
       </div>
-      <div class="pred-card">
-        <h3>Elbow Method for Optimal k (PLF Binning)</h3>
-        <img src="assets/elbow_method.png" alt="Elbow method" loading="lazy" />
+      <div class="impact-stat-divider" aria-hidden="true"></div>
+      <div class="impact-stat">
+        <span class="impact-num">SKU-level</span>
+        <span class="impact-label">Reorder prioritization</span>
       </div>
-      <div class="pred-card">
-        <h3>Actual vs Predicted Quantity by PLF Bin (2024)</h3>
-        <img src="assets/mean_actual_vs_predicted_quantity.png" alt="Actual vs predicted" loading="lazy" />
+    </div>
+
+    <div class="impact-outcomes">
+      <div class="impact-outcome">
+        <h3>Shared demand truth</h3>
+        <p>Teams replaced fragmented spreadsheets with a single filtered view of quantity, stability, and forecast performance by PLF and trait.</p>
+      </div>
+      <div class="impact-outcome">
+        <h3>Capacity-aware prioritization</h3>
+        <p>Stability and trend charts help planners decide which SKUs to protect under capacity limits versus which to watch or wind down.</p>
+      </div>
+      <div class="impact-outcome">
+        <h3>Faster weekly reviews</h3>
+        <p>Year and trait filters let operations and commercial partners answer “what changed?” in minutes during planning stand-ups.</p>
       </div>
     </div>
   </div>
@@ -194,15 +288,16 @@
 <!-- ───────────── Tech Stack ───────────── -->
 <section id="tech">
   <div class="container">
+    <p class="section-eyebrow">Technology</p>
     <h2 class="section-title">Technology Stack</h2>
-    <p class="section-subtitle">Tools and frameworks powering this project</p>
+    <p class="section-subtitle">Tools powering the pipeline, models, and interactive BI layer</p>
     <div class="tech-grid">
       <div class="tech-pill"><span class="tech-dot" style="background:#306998"></span>Python</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#119DFF"></span>Dash</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#3F4F75"></span>Plotly</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#150458"></span>Pandas</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#013243"></span>NumPy</div>
-      <div class="tech-pill"><span class="tech-dot" style="background:#7952B3"></span>Bootstrap</div>
+      <div class="tech-pill"><span class="tech-dot" style="background:#0e7490"></span>Bootstrap</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#F05032"></span>Git</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#181717"></span>GitHub Pages</div>
       <div class="tech-pill"><span class="tech-dot" style="background:#F7DF1E"></span>JavaScript</div>
@@ -214,7 +309,12 @@
 <!-- ───────────── Footer ───────────── -->
 <footer>
   <div class="container footer-inner">
-    <p>&copy; 2025 Purdue Data Mine &mdash; Hubner Seed Team</p>
+    <div class="footer-links">
+      <a href="https://github.com/TheDataMine/f2025_s2026_wl_hubner_predictiveanalytics" target="_blank" rel="noopener">GitHub Repository</a>
+      <span class="footer-sep" aria-hidden="true">·</span>
+      <a href="https://daniel-kang-vs.github.io" target="_blank" rel="noopener">daniel-kang-vs.github.io</a>
+    </div>
+    <p>Hubner Seed · Demand Forecasting &amp; Inventory Analytics</p>
     <p class="footer-note">All data on this site is synthetic and for demonstration purposes only.</p>
   </div>
 </footer>

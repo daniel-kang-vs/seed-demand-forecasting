@@ -6,11 +6,11 @@
 const PLOTLY_LAYOUT_BASE = {
   paper_bgcolor: 'rgba(0,0,0,0)',
   plot_bgcolor:  'rgba(0,0,0,0)',
-  font: { family: 'Inter, sans-serif', color: '#c8d8c0', size: 13 },
+  font: { family: 'Figtree, sans-serif', color: '#4a5a6a', size: 13 },
   margin: { l: 50, r: 30, t: 40, b: 50 },
   colorway: [
-    '#4ade80','#38bdf8','#facc15','#f472b6','#a78bfa',
-    '#fb923c','#34d399','#60a5fa','#f87171','#c084fc',
+    '#0e7490','#0b1f33','#14b8a6','#0369a1','#64748b',
+    '#0f766e','#1e3a5f','#0891b2','#334155','#155e75',
   ],
 };
 
@@ -126,7 +126,7 @@ function renderTreemap(data) {
     branchvalues: 'total',
     textinfo: 'label+value',
     marker: {
-      colorscale: [[0, '#1a3a1a'], [0.5, '#4ade80'], [1, '#86efac']],
+      colorscale: [[0, '#0b1f33'], [0.5, '#0e7490'], [1, '#5eead4']],
       colors: values,
     },
     hovertemplate: '%{label}: %{value}<extra></extra>',
@@ -157,7 +157,7 @@ function renderDonut(data) {
     values: entries.map(e => e[1]),
     textinfo: 'percent+label',
     textposition: 'inside',
-    marker: { line: { color: '#0f1a0f', width: 2 } },
+    marker: { line: { color: '#ffffff', width: 2 } },
   };
 
   Plotly.react('donutChart', [trace], {
@@ -176,21 +176,21 @@ function renderHistogram(data) {
 
   const trace = {
     x: qtys, type: 'histogram', nbinsx: 30,
-    marker: { color: '#4ade80', line: { color: '#1a3a1a', width: 1 } },
+    marker: { color: '#0e7490', line: { color: '#0b1f33', width: 1 } },
   };
 
   const layout = {
     ...PLOTLY_LAYOUT_BASE,
-    xaxis: { title: 'Quantity', gridcolor: 'rgba(255,255,255,0.05)' },
-    yaxis: { title: 'Count',    gridcolor: 'rgba(255,255,255,0.05)' },
+    xaxis: { title: 'Quantity', gridcolor: 'rgba(11,31,51,0.06)' },
+    yaxis: { title: 'Count',    gridcolor: 'rgba(11,31,51,0.06)' },
     shapes: [{
       type: 'line', yref: 'paper',
       x0: threshold, x1: threshold, y0: 0, y1: 1,
-      line: { dash: 'dash', color: '#facc15', width: 2 },
+      line: { dash: 'dash', color: '#b45309', width: 2 },
     }],
     annotations: [{
       x: threshold, y: 1, yref: 'paper', text: `50% mean = ${Math.round(threshold)}`,
-      showarrow: false, font: { color: '#facc15', size: 11 }, yanchor: 'bottom',
+      showarrow: false, font: { color: '#b45309', size: 11 }, yanchor: 'bottom',
     }],
     bargap: 0.05,
   };
@@ -238,13 +238,13 @@ function renderStability(data) {
     x: sorted.map(r => r.plf),
     y: sorted.map(r => r.cv),
     type: 'bar',
-    marker: { color: sorted.map(r => r.cv), colorscale: [[0,'#4ade80'],[1,'#f87171']], showscale: false },
+    marker: { color: sorted.map(r => r.cv), colorscale: [[0,'#0e7490'],[1,'#b45309']], showscale: false },
   };
 
   Plotly.react('stabilityChart', [trace], {
     ...PLOTLY_LAYOUT_BASE,
-    xaxis: { title: 'PLF', tickangle: -35, gridcolor: 'rgba(255,255,255,0.05)' },
-    yaxis: { title: 'CV (sd/mean)', tickformat: '.2f', gridcolor: 'rgba(255,255,255,0.05)' },
+    xaxis: { title: 'PLF', tickangle: -35, gridcolor: 'rgba(11,31,51,0.06)' },
+    yaxis: { title: 'CV (sd/mean)', tickformat: '.2f', gridcolor: 'rgba(11,31,51,0.06)' },
   }, PLOTLY_CONFIG);
 }
 
@@ -263,15 +263,15 @@ function renderTrend(data) {
     type: 'bar',
     marker: {
       color: sorted.map(r => r.slope),
-      colorscale: [[0,'#f87171'],[0.5,'#fcd34d'],[1,'#4ade80']],
+      colorscale: [[0,'#b45309'],[0.5,'#94a3b8'],[1,'#0e7490']],
       cmid: 0, showscale: false,
     },
   };
 
   Plotly.react('trendChart', [trace], {
     ...PLOTLY_LAYOUT_BASE,
-    xaxis: { title: 'PLF', tickangle: -35, gridcolor: 'rgba(255,255,255,0.05)' },
-    yaxis: { title: 'Slope (qty/year)', gridcolor: 'rgba(255,255,255,0.05)' },
+    xaxis: { title: 'PLF', tickangle: -35, gridcolor: 'rgba(11,31,51,0.06)' },
+    yaxis: { title: 'Slope (qty/year)', gridcolor: 'rgba(11,31,51,0.06)' },
   }, PLOTLY_CONFIG);
 }
 
@@ -285,17 +285,17 @@ function renderKPI(data) {
   const trace = {
     type: 'indicator', mode: 'gauge+number',
     value: pct,
-    number: { suffix: '%', valueformat: '.1f', font: { size: 38, color: '#4ade80' } },
-    title: { text: 'CV ≤ 0.40 & ≥ 3 yrs', font: { size: 14, color: '#b0c4a8' } },
+    number: { suffix: '%', valueformat: '.1f', font: { size: 38, color: '#0e7490' } },
+    title: { text: 'CV ≤ 0.40 & ≥ 3 yrs', font: { size: 14, color: '#4a5a6a' } },
     gauge: {
-      axis: { range: [0, 100], tickcolor: '#4a6a4a' },
-      bar: { color: '#4ade80', thickness: 0.35 },
-      bgcolor: '#1c2e1c',
+      axis: { range: [0, 100], tickcolor: '#94a3b8' },
+      bar: { color: '#0e7490', thickness: 0.35 },
+      bgcolor: '#e8eef3',
       borderwidth: 0,
       steps: [
-        { range: [0, 40],  color: 'rgba(248,113,113,0.15)' },
-        { range: [40, 70], color: 'rgba(252,211,77,0.12)' },
-        { range: [70, 100],color: 'rgba(74,222,128,0.12)' },
+        { range: [0, 40],  color: 'rgba(180,83,9,0.12)' },
+        { range: [40, 70], color: 'rgba(148,163,184,0.2)' },
+        { range: [70, 100],color: 'rgba(14,116,144,0.12)' },
       ],
     },
   };
@@ -312,7 +312,7 @@ function renderYield(data) {
   if (data.length === 0) {
     Plotly.react('yieldChart', [], {
       ...PLOTLY_LAYOUT_BASE,
-      annotations: [{ text: 'No yield data for selected filters', showarrow: false, font: { size: 16, color: '#b0c4a8' }, xref: 'paper', yref: 'paper', x: .5, y: .5 }],
+      annotations: [{ text: 'No yield data for selected filters', showarrow: false, font: { size: 16, color: '#4a5a6a' }, xref: 'paper', yref: 'paper', x: .5, y: .5 }],
     }, PLOTLY_CONFIG);
     return;
   }
@@ -345,16 +345,16 @@ function renderYield(data) {
 
   const traces = [
     { x: mats, y: ciHi, mode: 'lines', line: { width: 0 }, showlegend: false, hoverinfo: 'skip' },
-    { x: mats, y: ciLo, mode: 'lines', line: { width: 0 }, fill: 'tonexty', fillcolor: 'rgba(74,222,128,0.15)', name: '95% CI', hoverinfo: 'skip' },
-    { x: mats, y: means, mode: 'lines+markers', name: 'Mean Yield', line: { color: '#4ade80', width: 2 }, marker: { size: 6, color: '#4ade80' } },
+    { x: mats, y: ciLo, mode: 'lines', line: { width: 0 }, fill: 'tonexty', fillcolor: 'rgba(14,116,144,0.15)', name: '95% CI', hoverinfo: 'skip' },
+    { x: mats, y: means, mode: 'lines+markers', name: 'Mean Yield', line: { color: '#0e7490', width: 2 }, marker: { size: 6, color: '#0e7490' } },
   ];
 
   Plotly.react('yieldChart', traces, {
     ...PLOTLY_LAYOUT_BASE,
-    xaxis: { title: 'Relative Maturity', gridcolor: 'rgba(255,255,255,0.05)' },
-    yaxis: { title: 'Yield (bu / acre)', gridcolor: 'rgba(255,255,255,0.05)' },
+    xaxis: { title: 'Relative Maturity', gridcolor: 'rgba(11,31,51,0.06)' },
+    yaxis: { title: 'Yield (bu / acre)', gridcolor: 'rgba(11,31,51,0.06)' },
     showlegend: true,
-    legend: { font: { color: '#b0c4a8' }, bgcolor: 'rgba(0,0,0,0)' },
+    legend: { font: { color: '#4a5a6a' }, bgcolor: 'rgba(0,0,0,0)' },
   }, PLOTLY_CONFIG);
 }
 
