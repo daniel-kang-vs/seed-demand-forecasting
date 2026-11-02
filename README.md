@@ -1,21 +1,72 @@
-# Reorder Likelihood Dashboard — Hubner Seed
+# Seed Planning Dashboard
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python) ![Dash](https://img.shields.io/badge/Dash-Plotly-1f77b4?logo=plotly) ![pandas](https://img.shields.io/badge/pandas-ETL-150458?logo=pandas)
+> Which product lines are stable enough to plan around, and which need a closer look?
 
-> **Planning problem:** seed production arrives as a different wide spreadsheet every year. Planners need one table, a view of which lines are stable, and a forecast they can compare with a baseline before they change inventory. Built with the Purdue Data Mine for Hubner Seed.
+**Industry project · synthetic public demo**
 
-**[Live demo](https://daniel-kang-vs.github.io/seed-demand-forecasting/)** — synthetic data with the same shape as the partner file. No proprietary quantities.
+A Python cleaning workflow and interactive dashboard turn inconsistent yearly exports into a view of product mix, stability, and trends.
+
+[Case study](https://daniel-kang-vs.github.io/projects/seed-demand.html) · [Source evidence](https://github.com/daniel-kang-vs/seed-demand-forecasting/blob/main/hubner_predictions-app/pipeline.py) · [Live dashboard](https://daniel-kang-vs.github.io/seed-demand-forecasting/)
+
+## Highlights
+
+- **Multi-year ETL**
+- **Interactive Plotly views**
+- **Synthetic public data**
+
+## The problem
+
+Yearly production exports use inconsistent headers and wide company columns. A planner needs comparable history before making an inventory or forecasting decision.
+
+## Data & scope
+
+The public dashboard uses synthetic JSON with the partner schema. Each cleaned row represents a company, product line and year, with quantity and trait identifiers. Public demo figures do not describe partner performance.
+
+## How it works
+
+1. Detect the header and normalize identity columns in yearly exports.
+2. Reshape company columns into rows, attach the year, and combine cleaned files.
+3. Explore mix and quantity distributions; compare multi-year variation and slopes by product line.
+4. Keep forecast comparisons separate from the synthetic descriptive demo.
+
+## Key technical decision
+
+Make data preparation and exploratory analysis visible before showing model comparisons. The browser demo needs no private file or Python server.
+
+## Results & interpretation
+
+The public deliverable is an inspectable workflow and interactive planning interface. It demonstrates how a planner can narrow a product group, inspect its history, and question a forecast; it does not establish an inventory reduction or realized revenue lift.
+
+## Limitations & next steps
+
+Synthetic data demonstrates functionality, not business impact. Archived prediction images are separate artifacts, not metrics calculated from the synthetic filter selections. A deployment needs input-schema checks, configurable paths, and a time-based forecast evaluation.
+
+## Evidence & reproducibility
+
+docs/data/synthetic_cleaned.json and docs/data/synthetic_merged.json power the hosted descriptive dashboard.
+
+## Repository guide
+
+- [`hubner_predictions-app/pipeline.py`](hubner_predictions-app/pipeline.py) — analysis implementation.
+- [`docs/`](docs/) — static dashboard, styles, and browser-side analysis.
+
+## Run or inspect
+
+Preview the synthetic dashboard with no Python package installation:
+
+```bash
+python3 -m http.server 8000 --directory docs
+```
+
+Open http://localhost:8000.
+
+## Technology
+
+Python · pandas · Dash · Plotly
 
 ---
 
-## Project Highlights
-
-- An ETL step that finds the real header in a messy yearly export and melts a wide company layout into one long table
-- Descriptive views for mix, consistency, and product-line trends before anyone trusts a forecast
-- Model comparison on holdout **R²** and **RMSE**, plus an elbow chart for how product lines are binned
-- A Dash app with three jobs: describe, compare forecasts, and upload a new file
-
----
+## Technical appendix
 
 ## Problem Statement
 
@@ -122,3 +173,4 @@ The Pages demo in `docs/` is static and does not need Dash. It is the public ver
 | Dash / Plotly | Descriptive, forecast, and upload pages |
 | NumPy | Aggregations behind the charts |
 | GitHub Pages | Public demo |
+
