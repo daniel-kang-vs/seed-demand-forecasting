@@ -176,3 +176,7 @@ The Pages demo in `docs/` is static and does not need Dash. It is the public ver
 | NumPy | Aggregations behind the charts |
 | GitHub Pages | Public demo |
 
+
+## Dashboard exploration
+
+Year and trait selections recalculate quantity, distinct product lines, company counts and largest-company quantity share. They also filter the downloadable raw records. Stability and slope charts use all years for the selected trait and require three observed years. Horizontal rankings keep product-line identifiers readable. The summary table shows up to 60 lines; download includes every selected record.
