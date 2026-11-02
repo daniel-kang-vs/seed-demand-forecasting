@@ -8,6 +8,8 @@ A Python cleaning workflow and interactive dashboard turn inconsistent yearly ex
 
 [Case study](https://daniel-kang-vs.github.io/projects/seed-demand.html) · [Source evidence](https://github.com/daniel-kang-vs/seed-demand-forecasting/blob/main/hubner_predictions-app/pipeline.py) · [Live dashboard](https://daniel-kang-vs.github.io/seed-demand-forecasting/)
 
+[![Dashboard preview](https://raw.githubusercontent.com/daniel-kang-vs/daniel-kang-vs.github.io/main/pngs/seed-dashboard-preview.png)](https://daniel-kang-vs.github.io/seed-demand-forecasting/)
+
 ## Highlights
 
 - **Multi-year ETL**
