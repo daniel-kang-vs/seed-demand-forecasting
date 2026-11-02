@@ -99,6 +99,7 @@ function filteredMerged() {
 
 function renderAll() {
   const data = filtered();
+  renderSeedMetrics(data);
   renderTreemap(data);
   renderDonut(data);
   renderHistogram(data);
@@ -310,9 +311,10 @@ function renderStability(data) {
     .slice(0, 25);
 
   const trace = {
-    x: sorted.map((r) => r.plf),
-    y: sorted.map((r) => r.cv),
+    x: sorted.map((r) => r.cv),
+    y: sorted.map((r) => r.plf),
     type: "bar",
+    orientation: "h",
     marker: {
       color: sorted.map((r) => r.cv),
       colorscale: [
@@ -328,12 +330,16 @@ function renderStability(data) {
     [trace],
     {
       ...PLOTLY_LAYOUT_BASE,
-      xaxis: { title: "PLF",
-      type: "category", tickangle: -35, gridcolor: "rgba(11,31,51,0.06)" },
+      margin: { l: 65, r: 25, t: 20, b: 45 },
+      xaxis: {
+        title: "CV (sd / mean)",
+        rangemode: "tozero",
+        gridcolor: "rgba(11,31,51,.06)",
+      },
       yaxis: {
-        title: "CV (sd/mean)",
-        tickformat: ".2f",
-        gridcolor: "rgba(11,31,51,0.06)",
+        type: "category",
+        autorange: "reversed",
+        tickfont: { size: 11 },
       },
     },
     PLOTLY_CONFIG,
@@ -350,9 +356,10 @@ function renderTrend(data) {
     .slice(0, 25);
 
   const trace = {
-    x: sorted.map((r) => r.plf),
-    y: sorted.map((r) => r.slope),
+    x: sorted.map((r) => r.slope),
+    y: sorted.map((r) => r.plf),
     type: "bar",
+    orientation: "h",
     marker: {
       color: sorted.map((r) => r.slope),
       colorscale: [
@@ -370,9 +377,17 @@ function renderTrend(data) {
     [trace],
     {
       ...PLOTLY_LAYOUT_BASE,
-      xaxis: { title: "PLF",
-      type: "category", tickangle: -35, gridcolor: "rgba(11,31,51,0.06)" },
-      yaxis: { title: "Slope (qty/year)", gridcolor: "rgba(11,31,51,0.06)" },
+      margin: { l: 65, r: 25, t: 20, b: 45 },
+      xaxis: {
+        title: "Quantity / year",
+        rangemode: "tozero",
+        gridcolor: "rgba(11,31,51,.06)",
+      },
+      yaxis: {
+        type: "category",
+        autorange: "reversed",
+        tickfont: { size: 11 },
+      },
     },
     PLOTLY_CONFIG,
   );
@@ -602,3 +617,76 @@ function renderTable(data) {
     tbody.appendChild(tr);
   });
 }
+
+function renderSeedMetrics(data) {
+  const container = document.getElementById("seedMetrics");
+  container.replaceChildren();
+  const total = data.reduce((s, r) => s + r.qty, 0);
+  const companies = new Map();
+  data.forEach((r) =>
+    companies.set(r.company, (companies.get(r.company) || 0) + r.qty),
+  );
+  const leader = [...companies].sort((a, b) => b[1] - a[1])[0];
+  const format = (n) =>
+    n.toLocaleString(undefined, { maximumFractionDigits: 1 });
+  const cards = [
+    [
+      "Quantity in view",
+      format(total),
+      "Source quantity units · synthetic data",
+    ],
+    [
+      "Product lines",
+      new Set(data.map((r) => r.PLF)).size,
+      "Distinct PLFs in selected records",
+    ],
+    ["Companies", companies.size, "Distinct companies in selected records"],
+    [
+      "Largest company share",
+      total > 0 ? format((leader[1] / total) * 100) + "%" : "—",
+      leader
+        ? leader[0] + " · share of selected quantity"
+        : "No matching quantity",
+    ],
+  ];
+  cards.forEach(([label, value, note]) => {
+    const card = document.createElement("div");
+    card.className = "metric";
+    const title = document.createElement("div");
+    title.className = "label";
+    title.textContent = label;
+    const figure = document.createElement("strong");
+    figure.textContent = value;
+    const detail = document.createElement("small");
+    detail.textContent = note;
+    card.append(title, figure, detail);
+    container.append(card);
+  });
+}
+
+document.getElementById("seedExport").addEventListener("click", () => {
+  const keys = ["year", "TRAIT", "PLF", "company", "qty"];
+  const quote = (x) => '"' + String(x ?? "").replaceAll('"', '""') + '"';
+  const text = [keys, ...filtered().map((r) => keys.map((k) => r[k]))]
+    .map((r) => r.map(quote).join(","))
+    .join("\r\n");
+  const url = URL.createObjectURL(
+    new Blob([text], { type: "text/csv;charset=utf-8" }),
+  );
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "seed-selected-records.csv";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+const resetSeed = document.createElement("button");
+resetSeed.type = "button";
+resetSeed.className = "quiet-button";
+resetSeed.textContent = "Reset filters";
+document.querySelector(".filter-bar").append(resetSeed);
+resetSeed.addEventListener("click", () => {
+  document.getElementById("yearFilter").value = "ALL";
+  document.getElementById("traitFilter").value = "ALL";
+  renderAll();
+});
